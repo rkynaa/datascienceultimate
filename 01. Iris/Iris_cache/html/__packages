@@ -1,0 +1,14 @@
+base
+knitr
+rmdformats
+scales
+dplyr
+leaps
+MLmetrics
+ggplot2
+GGally
+zoo
+lmtest
+carData
+car
+formatR

@@ -1,0 +1,9 @@
+{
+    "path" : "~/datascienceultimate/01. Iris",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}
