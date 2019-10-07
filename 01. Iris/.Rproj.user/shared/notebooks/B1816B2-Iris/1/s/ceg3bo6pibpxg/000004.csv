@@ -1,0 +1,2 @@
+"0","data.test$pred <- predict(data.glm,data.test,type=""response"")"
+"0","responsePred <- as.factor(as.numeric(data.test$pred>=0.5))"

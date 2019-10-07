@@ -1,0 +1,2 @@
+"0","data <- data[-which(data$Sepal.Width %in% SepWid_out),]"
+"0","head(data[order(data$Sepal.Width, decreasing = T),])"

@@ -31,6 +31,7 @@ options(scipen = 9999)
 ## Preparing the libraries
 
 ```{r}
+library(FactoMineR, warn.conflicts = F)
 library(scales, warn.conflicts = F)
 library(dplyr,warn.conflicts = F)
 library(leaps, warn.conflicts = F)
@@ -54,21 +55,139 @@ data <- iris
 
 ### Data Number 1 (Iris) {.tabset}
 
-#### head()
+#### `head()`
 
 ```{r}
 head(data)
 ```
 
-#### str()
+#### `str()`
 
 ```{r}
 str(data)
 ```
 
-#### summary()
+#### `summary()`
 
 ```{r}
 summary(data)
 ```
 
+## Check for Outliers {.tabset}
+
+### For `Sepal.Length`
+
+```{r}
+boxplot(data$Sepal.Length)
+```
+
+### For `Sepal.Width`
+
+```{r}
+boxplot(data$Sepal.Width)
+```
+
+Which turns out that there are some on `Sepal.Width`
+
+```{r}
+SepWid_out <- boxplot(data$Sepal.Width, plot = F)$out
+SepWid_out
+```
+
+Thus, we get rid of all the **outliers**.
+
+```{r}
+data <- data[-which(data$Sepal.Width %in% SepWid_out),]
+head(data[order(data$Sepal.Width, decreasing = T),])
+```
+
+### For `Petal.Length`
+
+```{r}
+boxplot(data$Petal.Length)
+```
+
+### For `Petal.Width`
+
+```{r}
+boxplot(data$Petal.Width)
+```
+
+## Making the model *(Logistic Regression Model)*
+
+### Split the data into `Train` and `Test`
+
+```{r}
+set.seed(417)
+intrain <- sample(nrow(data), nrow(data)*0.8)
+length(intrain)
+data.train <- data[intrain, ]
+data.test <- data[-intrain, ]
+```
+
+#### `Train` dataset {.tabset}
+
+##### `head()`
+
+```{r}
+head(data.train)
+```
+
+##### `str()`
+
+```{r}
+str(data.train)
+```
+
+##### `summary()`
+
+```{r}
+summary(data.train)
+```
+
+
+#### `Test` dataset {.tabset}
+
+##### `head()`
+
+```{r}
+head(data.test)
+```
+
+##### `str()`
+
+```{r}
+str(data.test)
+```
+
+##### `summary()`
+
+```{r}
+summary(data.test)
+```
+
+### Make the glm (Logistic Regression Model)
+
+```{r}
+data.glm <- glm(Species~Sepal.Length+Sepal.Width+Petal.Width+Petal.Length,data = data.train, family = "binomial")
+data.glm
+```
+
+It appears that there is a `perfect separation` for `Sepal.Length`, `Petal.Width` and `Petal.Length`. Therefore, we cannot use all of it, only `Sepal.Width`.
+
+```{r}
+data.glm <- glm(Species~Sepal.Width,data = data.train, family = "binomial")
+data.glm
+```
+
+## Make the Prediction
+
+```{r}
+data.test$pred <- predict(data.glm,data.test,type="response")
+```
+
+```{r}
+table("predicted"=as.numeric(data.test$pred>=0.5), "actual"=data.test$Species)
+```
+ 
+ 
