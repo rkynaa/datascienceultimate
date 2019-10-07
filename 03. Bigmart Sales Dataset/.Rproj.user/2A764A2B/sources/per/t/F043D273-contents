@@ -1,0 +1,204 @@
+---
+title: "02. Loans Dataset"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::readthedown:
+    highlight: kate
+    number_section: true
+    toc_depth: 3
+---
+
+
+```{r knitr_init, echo=FALSE, cache=FALSE}
+library(knitr)
+library(rmdformats)
+
+## Global options
+options(max.print="1000000")
+opts_chunk$set(echo=TRUE,
+	             cache=TRUE,
+               prompt=FALSE,
+               tidy=TRUE,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+opts_knit$set(width=75)
+options(scipen = 9999)
+```
+
+# Basic
+
+## Preparing the libraries
+
+```{r}
+library(FactoMineR, warn.conflicts = F)
+library(scales, warn.conflicts = F)
+library(dplyr,warn.conflicts = F)
+library(leaps, warn.conflicts = F)
+library(MLmetrics, warn.conflicts = F)
+library(ggplot2, warn.conflicts = F)
+library(GGally, warn.conflicts = F)
+library(zoo, warn.conflicts = F)
+library(lmtest,warn.conflicts = F)
+library(carData, warn.conflicts = F)
+library(car, warn.conflicts = F)
+library(formatR, warn.conflicts = F)
+```
+
+## Preparing the data
+
+```{r}
+data <- read.csv("data-input/Train_UWu5bXk.csv")
+```
+
+## Test if the data is there
+
+### Data Number 1 (`data`) {.tabset}
+
+#### `head()`
+
+```{r}
+head(data)
+```
+
+#### `str()`
+
+```{r}
+str(data)
+```
+
+#### `summary()`
+
+```{r}
+summary(data)
+```
+
+## Check for Outliers
+
+### for `data` {.tabset}
+
+#### For `Item_Weight`
+
+```{r}
+boxplot(data$Item_Weight)
+```
+
+#### For `Item_Visibility`
+
+```{r}
+boxplot(data$Item_Visibility)
+```
+
+Which turns out that there are some on `CoapplicantIncome`
+
+```{r}
+itemVis_out <- boxplot(data$Item_Visibility, plot = F)$out
+itemVis_out
+```
+
+Thus, we get rid of all the **outliers**.
+
+```{r}
+data <- data[-which(data$Item_Visibility %in% itemVis_out),]
+head(data[order(data$Item_Visibility, decreasing = T),])
+```
+
+#### For `Item_MRP`
+
+```{r}
+boxplot(data$Item_MRP)
+```
+
+#### For `Outlet_Establishment_Year`
+
+```{r}
+boxplot(data$Outlet_Establishment_Year)
+```
+
+### Clean the dataset
+
+```{r}
+data <- na.omit(data)
+```
+
+
+## Making the model *(Logistic Regression Model)*
+
+### Split the data into `Train` and `Test`
+
+```{r}
+set.seed(417)
+intrain <- sample(nrow(data), nrow(data)*0.8)
+length(intrain)
+data.train <- data[intrain, ]
+data.test <- data[-intrain, ]
+```
+
+#### `Train` dataset {.tabset}
+
+##### `head()`
+
+```{r}
+head(data.train)
+```
+
+##### `str()`
+
+```{r}
+str(data.train)
+```
+
+##### `summary()`
+
+```{r}
+summary(data.train)
+```
+
+
+#### `Test` dataset {.tabset}
+
+##### `head()`
+
+```{r}
+head(data.test)
+```
+
+##### `str()`
+
+```{r}
+str(data.test)
+```
+
+##### `summary()`
+
+```{r}
+summary(data.test)
+```
+
+### Check for correlation
+
+```{r}
+data.train %>% 
+  select_if(is.numeric) %>% 
+  ggcorr(label = T)
+```
+
+### Make the lm (Linear Regression Model)
+
+> Based in the `Correlation Graph` above, it is better to use the `item_MRP` as the only predictor for the model
+
+```{r}
+data.lm <- lm(Item_Outlet_Sales~Item_MRP,data = data.train)
+data.lm
+```
+
+## Make the Prediction
+
+```{r}
+predictionRes <- predict(object = data.lm, newdata = data.test)
+data.res <- data.frame(Item_Identifier = data.test$Item_Identifier,
+                       Outlet_Identifier = data.test$Outlet_Identifier,
+                       Item_Outlet_Sales = predictionRes)
+```
+ 
+ 

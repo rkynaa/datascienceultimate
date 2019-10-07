@@ -1,0 +1,9 @@
+{
+    "path" : "~/datascienceultimate/02. Loan Prediction Dataset/data-input",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}

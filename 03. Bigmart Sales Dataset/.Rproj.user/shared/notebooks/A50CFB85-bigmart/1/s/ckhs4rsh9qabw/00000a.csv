@@ -1,0 +1,2 @@
+"0","data <- data[-which(data$Item_Visibility %in% itemVis_out),]"
+"0","head(data[order(data$Item_Visibility, decreasing = T),])"

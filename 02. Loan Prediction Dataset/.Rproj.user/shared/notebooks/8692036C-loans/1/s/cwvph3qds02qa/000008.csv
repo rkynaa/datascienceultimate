@@ -1,0 +1,2 @@
+"0","data <- data[-which(data$Loan_Amount_Term %in% loanTerm_out),]"
+"0","head(data[order(data$Loan_Amount_Term, decreasing = T),])"

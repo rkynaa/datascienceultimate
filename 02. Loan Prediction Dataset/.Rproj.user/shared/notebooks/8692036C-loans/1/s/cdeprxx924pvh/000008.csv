@@ -1,0 +1,2 @@
+"0","data <- data[-which(data$CoapplicantIncome %in% coAppInc_out),]"
+"0","head(data[order(data$CoapplicantIncome, decreasing = T),])"

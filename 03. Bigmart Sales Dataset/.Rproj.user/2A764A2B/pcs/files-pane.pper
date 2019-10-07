@@ -1,0 +1,9 @@
+{
+    "path" : "~/datascienceultimate/03. Bigmart Sales Dataset/data-input",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}

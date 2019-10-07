@@ -1,0 +1,237 @@
+---
+title: "02. Loans Dataset"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::readthedown:
+    highlight: kate
+    number_section: true
+    toc_depth: 3
+---
+
+
+```{r knitr_init, echo=FALSE, cache=FALSE}
+library(knitr)
+library(rmdformats)
+
+## Global options
+options(max.print="1000000")
+opts_chunk$set(echo=TRUE,
+	             cache=TRUE,
+               prompt=FALSE,
+               tidy=TRUE,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+opts_knit$set(width=75)
+options(scipen = 9999)
+```
+
+# Basic
+
+## Preparing the libraries
+
+```{r}
+library(FactoMineR, warn.conflicts = F)
+library(scales, warn.conflicts = F)
+library(dplyr,warn.conflicts = F)
+library(leaps, warn.conflicts = F)
+library(MLmetrics, warn.conflicts = F)
+library(ggplot2, warn.conflicts = F)
+library(GGally, warn.conflicts = F)
+library(zoo, warn.conflicts = F)
+library(lmtest,warn.conflicts = F)
+library(carData, warn.conflicts = F)
+library(car, warn.conflicts = F)
+library(formatR, warn.conflicts = F)
+```
+
+## Preparing the data
+
+```{r}
+data <- read.csv("data-input/train_ctrUa4K.csv")
+```
+
+## Test if the data is there
+
+### Data Number 1 (`data`) {.tabset}
+
+#### `head()`
+
+```{r}
+head(data)
+```
+
+#### `str()`
+
+```{r}
+str(data)
+```
+
+#### `summary()`
+
+```{r}
+summary(data)
+```
+
+## Check for Outliers
+
+### for `data.train` {.tabset}
+
+#### For `ApplicantIncome`
+
+```{r}
+boxplot(data$ApplicantIncome)
+```
+
+Which turns out that there are some on `ApplicantIncome`
+
+```{r}
+appInc_out <- boxplot(data$ApplicantIncome, plot = F)$out
+appInc_out
+```
+
+Thus, we get rid of all the **outliers**.
+
+```{r}
+data <- data[-which(data$ApplicantIncome %in% appInc_out),]
+head(data[order(data$ApplicantIncome, decreasing = T),])
+```
+
+#### For `CoapplicantIncome`
+
+```{r}
+boxplot(data$CoapplicantIncome)
+```
+
+Which turns out that there are some on `CoapplicantIncome`
+
+```{r}
+coAppInc_out <- boxplot(data$CoapplicantIncome, plot = F)$out
+coAppInc_out
+```
+
+Thus, we get rid of all the **outliers**.
+
+```{r}
+data <- data[-which(data$CoapplicantIncome %in% coAppInc_out),]
+head(data[order(data$CoapplicantIncome, decreasing = T),])
+```
+
+#### For `LoanAmount`
+
+```{r}
+boxplot(data$LoanAmount)
+```
+
+Which turns out that there are some on `LoanAmount`
+
+```{r}
+loanAmount_out <- boxplot(data$LoanAmount, plot = F)$out
+loanAmount_out
+```
+
+Thus, we get rid of all the **outliers**.
+
+```{r}
+data <- data[-which(data$LoanAmount %in% loanAmount_out),]
+head(data[order(data$LoanAmount, decreasing = T),])
+```
+
+#### For `Loan_Amount_Term`
+
+```{r}
+boxplot(data$Loan_Amount_Term)
+```
+
+Which turns out that there are some on `Loan_Amount_Term`
+
+```{r}
+loanTerm_out <- boxplot(data$Loan_Amount_Term, plot = F)$out
+loanTerm_out
+```
+
+Thus, we get rid of all the **outliers**.
+
+```{r}
+data <- data[-which(data$Loan_Amount_Term %in% loanTerm_out),]
+head(data[order(data$Loan_Amount_Term, decreasing = T),])
+```
+
+## Making the model *(Logistic Regression Model)*
+
+
+### Split the data into `Train` and `Test`
+
+```{r}
+set.seed(417)
+intrain <- sample(nrow(data), nrow(data)*0.8)
+length(intrain)
+data.train <- data[intrain, ]
+data.test <- data[-intrain, ]
+```
+
+#### `Train` dataset {.tabset}
+
+##### `head()`
+
+```{r}
+head(data.train)
+```
+
+##### `str()`
+
+```{r}
+str(data.train)
+```
+
+##### `summary()`
+
+```{r}
+summary(data.train)
+```
+
+
+#### `Test` dataset {.tabset}
+
+##### `head()`
+
+```{r}
+head(data.test)
+```
+
+##### `str()`
+
+```{r}
+str(data.test)
+```
+
+##### `summary()`
+
+```{r}
+summary(data.test)
+```
+
+### Make the glm (Logistic Regression Model)
+
+```{r}
+data.glm <- glm(Loan_Status~Gender+Married+Dependents+Education+Self_Employed+ApplicantIncome+CoapplicantIncome+LoanAmount+Credit_History+Property_Area,data = data.train, family = "binomial")
+data.glm
+```
+
+## Make the Prediction
+
+```{r}
+data.test$pred <- predict(data.glm,data.test,type="response")
+data.test$pred
+
+data.test <- na.omit(data.test)
+
+data.test$pred <- as.factor(ifelse(data.test$pred >= 0.5, 'Y','N'))
+as.factor(data.test$Loan_Status)
+```
+ 
+```{r}
+caret::confusionMatrix(data = data.test$pred, reference=as.factor(data.test$Loan_Status), positive="Y")
+```
+ 
+ 

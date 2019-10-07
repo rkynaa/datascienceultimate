@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1570436015895.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4020756448",
+    "id" : "B25CC068",
+    "lastKnownWriteTime" : 1570439469,
+    "last_content_update" : 1570440378383,
+    "path" : "~/datascienceultimate/02. Loan Prediction Dataset/loans.Rmd",
+    "project_path" : "loans.Rmd",
+    "properties" : {
+        "cursorPosition" : "213,26",
+        "scrollLine" : "182",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

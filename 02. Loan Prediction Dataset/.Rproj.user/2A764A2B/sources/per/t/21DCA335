@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1570437372429.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4294019396",
+    "id" : "21DCA335",
+    "lastKnownWriteTime" : 1570435858,
+    "last_content_update" : 1570435858,
+    "path" : "~/datascienceultimate/02. Loan Prediction Dataset/data-input/sample_submission_49d68Cx.csv",
+    "project_path" : "data-input/sample_submission_49d68Cx.csv",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "text"
+}

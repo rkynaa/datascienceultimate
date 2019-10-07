@@ -1,0 +1,23 @@
+"0","data.lm <- lm(Item_Outlet_Sales~Item_MRP,data = data.train)"
+"0","data.lm"
+"1","
+Call:
+"
+"1",""
+"1","lm(formula = Item_Outlet_Sales ~ Item_MRP, data = data.train)"
+"1",""
+"1","
+
+"
+"1","Coefficients:
+"
+"1","(Intercept)  "
+"1","   Item_MRP  "
+"1","
+"
+"1","     -38.33  "
+"1","      15.35  "
+"1","
+"
+"1","
+"

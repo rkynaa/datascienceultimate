@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1570441032337.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "544617066",
+    "id" : "CDB0B1F9",
+    "lastKnownWriteTime" : 1570284005,
+    "last_content_update" : 1570284005,
+    "path" : "~/datascienceultimate/03. Bigmart Sales Dataset/data-input/SampleSubmission_TmnO39y.csv",
+    "project_path" : "data-input/SampleSubmission_TmnO39y.csv",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "text"
+}

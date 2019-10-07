@@ -1,0 +1,3 @@
+"0","data.train %>% "
+"0","  select_if(is.numeric) %>% "
+"0","  ggcorr(label = T)"
